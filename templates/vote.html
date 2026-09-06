@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cast Your Vote</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+        }
+
+        .container {
+            width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .candidate {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #1f4e79;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Cast Your Vote</h2>
+
+    <p>Welcome, <b>{{ user["name"] }}</b></p>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    {% if user["has_voted"] == 1 %}
+
+        <h3>You have already voted.</h3>
+
+        <a href="{{ url_for('results') }}">View Results</a>
+
+    {% else %}
+
+        <form method="POST">
+
+            {% for candidate in candidates %}
+
+            <div class="candidate">
+
+                <label>
+
+                    <input
+                        type="radio"
+                        name="candidate"
+                        value="{{ candidate['id'] }}"
+                        required
+                    >
+
+                    <b>{{ candidate["name"] }}</b>
+
+                    - {{ candidate["party"] }}
+
+                </label>
+
+            </div>
+
+            {% endfor %}
+
+            <button type="submit">Submit Vote</button>
+
+        </form>
+
+    {% endif %}
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+</div>
+
+</body>
+</html>

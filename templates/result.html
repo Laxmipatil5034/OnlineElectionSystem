@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Election Results</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+        }
+
+        .container {
+            width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #1f4e79;
+            color: white;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #1f4e79;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    {% if admin %}
+
+        <h1>Admin Dashboard</h1>
+
+        <h2>Election Results</h2>
+
+    {% else %}
+
+        <h1>Election Results</h1>
+
+    {% endif %}
+
+
+    <table>
+
+        <tr>
+            <th>Rank</th>
+            <th>Candidate</th>
+            <th>Party</th>
+            <th>Votes</th>
+        </tr>
+
+        {% for candidate in candidates %}
+
+        <tr>
+
+            <td>{{ loop.index }}</td>
+
+            <td>{{ candidate["name"] }}</td>
+
+            <td>{{ candidate["party"] }}</td>
+
+            <td>{{ candidate["votes"] }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+
+    {% if admin and users %}
+
+        <h2>Registered Voters</h2>
+
+        <table>
+
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user["name"] }}</td>
+
+                <td>{{ user["email"] }}</td>
+
+                <td>
+                    {% if user["has_voted"] == 1 %}
+                        Voted
+                    {% else %}
+                        Not Voted
+                    {% endif %}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    {% endif %}
+
+
+    {% if admin %}
+
+        <a href="{{ url_for('logout') }}">Admin Logout</a>
+
+    {% else %}
+
+        <a href="{{ url_for('index') }}">Home</a>
+
+        {% if session.get("user_id") %}
+            <a href="{{ url_for('vote') }}">Back to Voting</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
